@@ -5,6 +5,7 @@ import jm.task.core.jdbc.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.Query;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -100,8 +101,9 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            String sql = "TRUNCATE TABLE users";
-            session.createSQLQuery(sql).executeUpdate();
+            String hql = "DELETE FROM User";
+            Query query = session.createQuery(hql);
+            query.executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -110,4 +112,5 @@ public class UserDaoHibernateImpl implements UserDao {
             e.printStackTrace();
         }
     }
+
 }
